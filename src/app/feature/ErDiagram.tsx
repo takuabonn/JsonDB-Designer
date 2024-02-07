@@ -19,7 +19,7 @@ import Editor from "@monaco-editor/react";
 import { JsonData, RelationCol, RelationType } from "@/app/node/types";
 import { TableNode } from "@/app/node/TableNode";
 import "reactflow/dist/style.css";
-import RelationEdge from "@/app/relationEdge/RelationEdge";
+import {RelationEdge} from "@/app/relationEdge/RelationEdge";
 import {
   relationEdgeSourceHandleId,
   relationEdgeTargetHandleId,
@@ -104,42 +104,69 @@ export const ERDiagram = () => {
       // console.error("Invalid JSON:", error);
     }
   };
+  console.log(edges)
   useEffect(() => {
+   
     try {
+      if (currentJson.trim() === "") {
+        setNodes([]);
+        setEdges([]);
+        return;
+      }
+  
       const { tables, relations } = JSON.parse(currentJson) as JsonData;
-      const nodes = tables.map((table, index) => {
-        const tableRelations: Array<RelationCol | undefined> = relations?.map(
-          (relation) => {
+
+      const cuTableNameMap:any = {}
+      const cuRelationNameMap: any = {}
+      for(const table of tables) {
+        
+        if (table.tableName in cuTableNameMap) return;
+        cuTableNameMap[table.tableName] = 1;
+        
+      }
+      for(const relation of relations) {
+        if (relation.source.relationName in cuRelationNameMap || relation.target.relationName in cuRelationNameMap) return;
+        cuRelationNameMap[relation.source.relationName] = 1;
+        cuRelationNameMap[relation.target.relationName] = 1;
+      }
+
+      console.log(edges)
+      const newNodes = tables.map((table, index) => {
+        const tableRelations: Array<RelationCol> = relations?.reduce(
+          (result, relation) => {
             if (table.tableName === relation.source.table) {
-              return {
+              return [...result,  {
                 type: "source",
                 relationName: relation.source.relationName,
                 relationType: relation.relationType as RelationType,
-              };
+              }];
             }
             if (table.tableName === relation.target.table) {
-              return {
+              return [...result, {
                 type: "target",
                 relationName: relation.target.relationName,
                 relationType: relation.relationType as RelationType,
-              };
+              }];
             }
-          }
+            return result
+          },
+          [] as Array<RelationCol>
         );
+
+        const previousNode:Node|undefined = nodes.find((prev: Node) => prev.id === table.tableName);
 
         return {
           id: table.tableName,
           type: "table", // テーブルを表すタイプ
           position: {
-            x: ((index + 1) % 2) * 20,
-            y: Math.floor((index + 1) / 2) * 150,
+            x: previousNode?.position.x ?? ((index + 1) % 2) * 20,
+            y: previousNode?.position.y ?? Math.floor((index + 1) / 2) * 150,
           }, // 2個ずつで改行する配置
           width: 100, // 仮の幅を設定
           height: 50, // 仮の高さを設定
           data: { ...table, relations: tableRelations },
         };
       });
-
       const relationEdges = relations?.map((rel) => {
         const base = {
           id: `edge-${rel.source.relationName}-${rel.target.relationName}`,
@@ -154,9 +181,12 @@ export const ERDiagram = () => {
           targetHandle: relationEdgeTargetHandleId(rel.target.relationName),
         };
       });
+     
 
-      setNodes(nodes);
       setEdges(relationEdges);
+      
+      setNodes(newNodes);
+     
     } catch (error) {
       // console.error("Invalid JSON:", error);
     }

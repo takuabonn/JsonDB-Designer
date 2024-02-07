@@ -9,7 +9,7 @@ import {
 import { RelationEdgeData } from "./types";
 
 
-const RelationEdge = ({
+export const RelationEdge = ({
     sourceX,
     sourceY,
     targetX,
@@ -27,6 +27,7 @@ const RelationEdge = ({
       targetPosition,
       borderRadius: 8,
     });
+    console.log(data)
   
   
     const { relationType } = data!;
@@ -53,4 +54,3 @@ const RelationEdge = ({
     );
   };
   
-  export default memo(RelationEdge);
