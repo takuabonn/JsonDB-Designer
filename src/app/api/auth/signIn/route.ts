@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { APIResponse } from "@/app/api/types";
 import { createSessionCookie } from "@/lib/firebases/server";
 
+export const runtime = 'edge';
 export async function POST(request: NextRequest) {
   const reqBody = (await request.json()) as { idToken: string };
   const idToken = reqBody.idToken;

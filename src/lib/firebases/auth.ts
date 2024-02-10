@@ -3,6 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { APIResponse } from "@/app/api/types";
 import { auth } from "@/lib/firebases/client";
 
+export const runtime = 'edge';
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 

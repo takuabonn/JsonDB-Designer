@@ -3,7 +3,7 @@ import { ERDiagram } from "./feature/ErDiagram";
 import { useState } from "react";
 import { getCurrentUser } from "@/lib/firebases/server";
 
-
+export const runtime = 'edge';
 export default async function Home() {
   const currentUser = await getCurrentUser();
   
