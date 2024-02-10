@@ -31,82 +31,18 @@ const edgeTypes = {
   relation: RelationEdge,
 };
 
-export const ERDiagram = () => {
+type PropsType = {
+  currentJson: string
+}
+export const ERDiagram = ({currentJson}:PropsType) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-
-  const iniJson = {
-    tables: [
-      {
-        tableName: "users",
-        columns: [
-          {
-            name: "id",
-            type: "integer",
-            defaultValue: null,
-          },
-          {
-            name: "full_name",
-            type: "string",
-            defaultValue: null,
-          },
-        ],
-      },
-      {
-        tableName: "posts",
-        columns: [
-          {
-            name: "id",
-            type: "integer",
-            defaultValue: null,
-          },
-          {
-            name: "user_id",
-            type: "integer",
-            defaultValue: null,
-          },
-          {
-            name: "content",
-            type: "string",
-            defaultValue: null,
-          },
-        ],
-      },
-    ],
-    relations: [
-      {
-        source: {
-          table: "users",
-          relationName: "user",
-          column: "id",
-        },
-        target: {
-          table: "posts",
-          relationName: "posts",
-          column: "user_id",
-        },
-        relationType: "One-Many",
-      },
-    ],
-  };
-  const [currentJson, setJson] = useState(JSON.stringify(iniJson, null, 2));
-
-  const regenerateNodes = () => {};
 
   const onNodesChange: OnNodesChange = (changes: any) => {
     setNodes((nodes) => applyNodeChanges(changes, nodes as any) as any);
   };
 
-  const handleEditorChange = (value: string | undefined, event: any) => {
-    try {
-      setJson(value!);
-    } catch (error) {
-      // console.error("Invalid JSON:", error);
-    }
-  };
-  console.log(edges)
   useEffect(() => {
-   
     try {
       if (currentJson.trim() === "") {
         setNodes([]);
@@ -130,7 +66,6 @@ export const ERDiagram = () => {
         cuRelationNameMap[relation.target.relationName] = 1;
       }
 
-      console.log(edges)
       const newNodes = tables.map((table, index) => {
         const tableRelations: Array<RelationCol> = relations?.reduce(
           (result, relation) => {
@@ -191,25 +126,10 @@ export const ERDiagram = () => {
       // console.error("Invalid JSON:", error);
     }
   }, [currentJson]);
-  const handleEditorDidMount = (editor: any, monaco: any) => {
-    editor.updateOptions({
-      formatOnType: true,
-      formatOnPaste: true,
-      formatOnSave: true,
-    });
-  };
 
   return (
-    <div className="flex w-screen">
-      <Editor
-        height="90vh"
-        width={"30vw"}
-        language="json"
-        value={currentJson}
-        onChange={handleEditorChange}
-        onMount={handleEditorDidMount}
-      />
-      <div className="w-2/3 h-screen">
+    <>
+      <div className="w-2/3 h-auto">
         <ReactFlow
           // fitView
           snapToGrid
@@ -266,6 +186,6 @@ export const ERDiagram = () => {
           </marker>
         </defs>
       </svg>
-    </div>
+    </>
   );
 };
