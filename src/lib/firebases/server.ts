@@ -13,7 +13,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 //     ),
 //   });
 // }
-export const runtime = 'edge';
+// export const runtime = 'edge';
 
 export const firebaseApp =
   getApps().find((it) => it.name === "firebase-admin-app") ||
