@@ -10,7 +10,6 @@ export const Header = () => {
   
 
   const handleSignIn = async () => {
-    console.log("lo")
     const isOk = await signInWithGoogle();
 
     if (isOk) router.push("/");
