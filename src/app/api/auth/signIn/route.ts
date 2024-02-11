@@ -1,11 +1,9 @@
-
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { APIResponse } from "@/app/api/types";
 import { createSessionCookie } from "@/lib/firebases/server";
 
-export const runtime = 'edge';
 export async function POST(request: NextRequest) {
   const reqBody = (await request.json()) as { idToken: string };
   const idToken = reqBody.idToken;
@@ -18,3 +16,4 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json<APIResponse<string>>({ success: true, data: "Signed in successfully." });
 }
+// export const runtime = 'edge';
