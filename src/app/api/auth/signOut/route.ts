@@ -1,10 +1,12 @@
+
+export const runtime = 'edge';
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 import { APIResponse } from "@/app/api/types";
 import { revokeAllSessions } from "@/lib/firebases/server";
 
-export const runtime = 'edge';
+
 export async function GET() {
   const sessionCookie = cookies().get("__session")?.value;
 
@@ -17,3 +19,4 @@ export async function GET() {
 
   return NextResponse.json<APIResponse<string>>({ success: true, data: "Signed out successfully." });
 }
+// export const runtime = 'edge';
