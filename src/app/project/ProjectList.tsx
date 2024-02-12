@@ -29,17 +29,8 @@ export const ProjectList = ({userId}: PropsType) => {
 
         // コンポーネントがアンマウントされたときにリスナーを解除する
         return () => unsubscribe();
-        // const fetchProjects = async () => {
-        //     const q = query(collection(db, "projects"), where("user_id","==",  userId), limit(12))
-        //     const querySnapshot = await getDocs(q);
-        //     const ret: any[] = [];
-        //     querySnapshot.forEach(doc => {
-        //         ret.push({...doc.data(),project_id: doc.id});
-        //     });
-        //     setProjects(ret)
-        // }
-        // fetchProjects();
-    }, [])
+     
+    }, [userId])
 
     const onDelete = async (projectId:string) => {
         const response = await fetch("/api/project/delete", {
