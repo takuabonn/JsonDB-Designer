@@ -14,6 +14,9 @@ export const ProjectList = ({userId}: PropsType) => {
 
     const [projects, setProjects] = useState<any[]>([])
     useEffect(() => {
+        if (!userId) {
+            return;
+        }
         const projectsCollectionRef = collection(db, 'projects');
         const q = query(projectsCollectionRef, where('user_id', '==', userId), limit(12));
 
