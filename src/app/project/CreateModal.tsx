@@ -4,6 +4,7 @@ import { addDoc, collection, doc, getCountFromServer, query } from "firebase/fir
 import { useRouter } from "next/navigation";
 import React, { memo, useState } from "react"
 
+// eslint-disable-next-line react/display-name
 export const CreateModal = memo(({ setOpen }: { setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const router = useRouter();
     const [projectName, setProjectName] = useState("");
