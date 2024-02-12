@@ -1,12 +1,12 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { APIResponse } from "@/app/api/types";
-import { auth } from "@/lib/firebases/client";
+import { auth, db } from "@/lib/firebases/client";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 // export const runtime = 'edge';
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-
   try {
     const userCreds = await signInWithPopup(auth, provider);
     const idToken = await userCreds.user.getIdToken();
@@ -20,6 +20,14 @@ export async function signInWithGoogle() {
     });
     const resBody = (await response.json()) as unknown as APIResponse<string>;
     if (response.ok && resBody.success) {
+      const userDoc = doc(db, "users", userCreds.user.uid);
+      const docSnap = await getDoc(userDoc);
+      if (!docSnap.exists()) {
+        await setDoc(userDoc, {
+          name: userCreds.user.displayName,
+          id: userCreds.user.uid
+        })
+      }
       return true;
     } else return false;
   } catch (error) {

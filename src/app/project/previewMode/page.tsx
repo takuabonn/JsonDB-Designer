@@ -1,9 +1,9 @@
 'use client'
 import { ERDiagram } from "@/app/feature/ErDiagram";
 import { Editor } from "@monaco-editor/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const iniJson = {
+const defaultJson = {
   tables: [
     {
       tableName: "users",
@@ -57,33 +57,8 @@ const iniJson = {
     },
   ],
 };
-export default function Project({ params }: { params: { projectId: string } }) {
-  useEffect(() => {
-    const projectFetch = async () => {
-      const response = await fetch(`/api/project/${params.projectId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response) {
-        const json = await response.json()
-        if (!("tables" in json.data)) {
-          return;
-        }
-        const tables = json.data.tables;
-        const relations = json.data.relations
-        const mergedJson = {
-          tables:tables, relations:relations
-        };
-        setJson(JSON.stringify(mergedJson, null, 2))
-
-      }
-    }
-    projectFetch()
-
-  },[])
-  const [currentJson, setJson] = useState(JSON.stringify(iniJson, null, 2));
+export default function PreviewMode() {
+  const [currentJson, setJson] = useState(JSON.stringify(defaultJson, null, 2));
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editor.updateOptions({
@@ -96,6 +71,7 @@ export default function Project({ params }: { params: { projectId: string } }) {
     try {
       setJson(value!);
     } catch (error) {
+      // console.error("Invalid JSON:", error);
     }
   };
   return (
@@ -108,14 +84,10 @@ export default function Project({ params }: { params: { projectId: string } }) {
         value={currentJson}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
-        options={{
-          wordWrap: 'on',
-          formatOnPaste: true,
-          formatOnType: true
-        }}
       />
-     <ERDiagram currentJson={currentJson} projectId={params.projectId}/>
+     <ERDiagram currentJson={currentJson}/>
     </div>
     </>
   );
 }
+

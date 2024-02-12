@@ -32,9 +32,11 @@ const edgeTypes = {
 };
 
 type PropsType = {
-  currentJson: string
+  currentJson: string,
+  previewMode?: boolean,
+  projectId?: string
 }
-export const ERDiagram = ({currentJson}:PropsType) => {
+export const ERDiagram = ({currentJson, previewMode, projectId}:PropsType) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -127,9 +129,22 @@ export const ERDiagram = ({currentJson}:PropsType) => {
     }
   }, [currentJson]);
 
+  const onSave = async () => {
+    const request = JSON.stringify({...JSON.parse(currentJson), projectId: projectId})
+    const response = await fetch(`/api/project/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+       
+      },
+      body: request,
+    });
+  }
+
   return (
     <>
       <div className="w-2/3 h-auto">
+        {!previewMode && <button className="w-32 h-auto px-2 bg-green-400 hover:bg-green-500 text-white border rounded" onClick={onSave}>save</button>}
         <ReactFlow
           // fitView
           snapToGrid
