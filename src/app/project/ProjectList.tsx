@@ -35,7 +35,9 @@ export const ProjectList = ({userId}: PropsType) => {
      
     }, [userId])
 
-    const onDelete = async (projectId:string) => {
+    const onDelete = async (e:any, projectId:string) => {
+        e.preventDefault();
+
         const response = await fetch("/api/project/delete", {
             method: "DELETE",
             headers: {
@@ -46,22 +48,21 @@ export const ProjectList = ({userId}: PropsType) => {
     }
 
     return (
-        <div className="w-9/12 mx-auto mt-10 grid grid-cols-4 gap-4">
+        <div className="w-full mx-auto mt-3 overflow-scroll">
           
             {
                 projects.map(project => (
-                    <div className="border rounded shadow-xl h-auto" key={project.project_id}>
-                        <div className="flex justify-center py-10 px-2 gap-4 ">
-                            <FaDatabase className="text-green-400" size={"1.5em"}/>
-                        <div>{project.projectName}</div>
+                    <Link href={`/project/${project.project_id}`}>
+                    <div className=" h-16 px-5 py-5 border-b" key={project.project_id} >
+                        <div className="flex justify-start  px-2 gap-4 relative">
+                            <FaDatabase className="text-green-400" size={"1.3em"}/>
+                            <div className="text-sm">{project.projectName}</div>     
+                            <button onClick={(e) => onDelete(e, project.project_id)} className="absolute end-0 text-sm text-green-400 hover:text-green-500">削除</button>
+                  
                         </div>
-                        <div className="flex justify-center w-32  mx-auto pb-2 gap-4">
-                        <Link href={`/project/${project.project_id}`}>
-                            <button className="text-green-400 hover:text-green-500">編集</button>
-                        </Link>
-                            <button onClick={() => onDelete(project.project_id)} className="text-green-400 hover:text-green-500">削除</button>
-                        </div>
+                       
                     </div>
+                    </Link>
                 ))
             }
             
