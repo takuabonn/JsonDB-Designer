@@ -1,9 +1,6 @@
 {
-    "printWidth": 120,
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": true,
-    "singleQuote": true,
-    "jsxSingleQuote": true,
-    "endOfLine": "lf"
+    "editor.renderWhitespace": "all",
+    "editor.formatOnSave": true,
+    // "prettier.prettierPath": "./node_modules/prettier",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
 }

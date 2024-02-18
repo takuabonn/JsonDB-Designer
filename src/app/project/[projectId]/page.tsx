@@ -1,7 +1,7 @@
 'use client'
 import { ERDiagram } from "@/app/feature/ErDiagram";
 import { Editor } from "@monaco-editor/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const iniJson = {
   tables: [
@@ -58,7 +58,31 @@ const iniJson = {
   ],
 };
 export default function Project({ params }: { params: { projectId: string } }) {
-  
+  useEffect(() => {
+    const projectFetch = async () => {
+      const response = await fetch(`/api/project/${params.projectId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response) {
+        const json = await response.json()
+        if (!("tables" in json.data)) {
+          return;
+        }
+        const tables = json.data.tables;
+        const relations = json.data.relations
+        const mergedJson = {
+          tables:tables, relations:relations
+        };
+        setJson(JSON.stringify(mergedJson, null, 2))
+
+      }
+    }
+    projectFetch()
+
+  },[])
   const [currentJson, setJson] = useState(JSON.stringify(iniJson, null, 2));
 
   const handleEditorDidMount = (editor: any, monaco: any) => {
@@ -72,22 +96,30 @@ export default function Project({ params }: { params: { projectId: string } }) {
     try {
       setJson(value!);
     } catch (error) {
-      // console.error("Invalid JSON:", error);
     }
   };
   return (
     <>
-    <div className="flex w-screen">
+     <div className="grow shrink-0 basis-1/3">
       <Editor
-        height="90vh"
-        width={"30vw"}
+        height={"93vh"}
         language="json"
         value={currentJson}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
+        options={{
+          wordWrap: 'on',
+          formatOnPaste: true,
+          formatOnType: true
+        }}
+       
       />
-     <ERDiagram currentJson={currentJson}/>
-    </div>
+      </div>
+      <div className="grow shrink p-0 basis-1/3">
+      <ERDiagram currentJson={currentJson} projectId={params.projectId}/>
+
+      </div>
+   
     </>
   );
 }

@@ -10,7 +10,6 @@ export const Header = () => {
   
 
   const handleSignIn = async () => {
-    console.log("lo")
     const isOk = await signInWithGoogle();
 
     if (isOk) router.push("/");
@@ -24,7 +23,7 @@ export const Header = () => {
   
   return (
     <>
-     <div className=" flex justify-between content-center items-center w-full h-12 bg-green-400 text-white mb-3">
+     <div className="flex justify-between content-center items-center w-full h-12 bg-green-400 text-white">
         <div className="pl-5">
         <h1> JSONDB-DESIGNER</h1>
         </div>

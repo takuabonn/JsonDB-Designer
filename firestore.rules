@@ -15,5 +15,20 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if request.time < timestamp.date(2024, 3, 8);
     }
+
+    // プロジェクトのコレクションへの読み取りアクセスを許可
+    match /projects/{projectId} {
+      allow read: if request.auth.uid != null && resource.data.user_id == request.auth.uid;
+      // 他の操作（書き込み、更新、削除）のアクセスを許可または拒否する必要がある場合、これについても定義する
+    }
+
+    // 認証されたユーザーのみがアクセス可能
+    match /users/{userId} {
+      allow read: if request.auth != null; // 認証されたユーザーに読み取りアクセスを許可
+      allow create: if request.auth != null // 認証されたユーザーに書き込みアクセスを許可
+                   && request.auth.uid == userId // ユーザーは自分自身のドキュメントにのみ書き込み可能
+                   && request.resource.data.id == userId; // リクエストのデータにユーザーIDが含まれていることを確認
+      allow update, delete: if false; // 更新と削除は許可しない
+    }
   }
 }

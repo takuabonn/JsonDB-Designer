@@ -18,6 +18,7 @@ export const firebaseApp =
     "firebase-admin-app"
   );
 export const auth = getAuth(firebaseApp);
+export const adminDB = getFirestore(firebaseApp)
 
 export async function isUserAuthenticated(session: string | undefined = undefined) {
     const _session = session ?? (await getSession());
