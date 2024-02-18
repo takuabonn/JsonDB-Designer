@@ -26,7 +26,7 @@ export const CreateModal = memo(({ setOpen }: { setOpen: React.Dispatch<React.Se
 
     return (
         <div className="w-screen h-screen bg-gray-400/50 fixed top-0">
-            <div className="z-50 w-80 h-40 bg-white mx-auto mt-60 relative">
+            <div className="z-70 w-80 h-40 bg-white mx-auto mt-60 relative">
             <div className="w-full h-auto px-3 py-3 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-md z-10">
                 <input
                     type="text"

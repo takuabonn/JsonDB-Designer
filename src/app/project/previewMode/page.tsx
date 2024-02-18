@@ -76,17 +76,20 @@ export default function PreviewMode() {
   };
   return (
     <>
-    <div className="flex w-screen">
+      <div className="grow shrink-0 basis-1/3">
       <Editor
-        height="90vh"
-        width={"30vw"}
+        height={"93vh"}
         language="json"
         value={currentJson}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
+       
       />
-     <ERDiagram currentJson={currentJson}/>
-    </div>
+      </div>
+      <div className="grow shrink p-0 basis-1/3">
+      <ERDiagram currentJson={currentJson} previewMode={true}/>
+
+      </div>
     </>
   );
 }

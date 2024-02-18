@@ -14,6 +14,7 @@ import ReactFlow, {
   Connection,
   applyNodeChanges,
   OnNodesChange,
+  Panel,
 } from "reactflow";
 import Editor from "@monaco-editor/react";
 import { JsonData, RelationCol, RelationType } from "@/app/node/types";
@@ -143,8 +144,7 @@ export const ERDiagram = ({currentJson, previewMode, projectId}:PropsType) => {
 
   return (
     <>
-      <div className="w-2/3 h-auto">
-        {!previewMode && <button className="w-32 h-auto px-2 bg-green-400 hover:bg-green-500 text-white border rounded" onClick={onSave}>save</button>}
+      {/* <div className="w-2/3"> */}
         <ReactFlow
           // fitView
           snapToGrid
@@ -154,11 +154,15 @@ export const ERDiagram = ({currentJson, previewMode, projectId}:PropsType) => {
           edgeTypes={edgeTypes}
           onNodesChange={onNodesChange}
         >
+          <Panel position="top-right">
+          {!previewMode && <button className="w-32 h-auto px-2 bg-green-400 hover:bg-green-500 text-white border rounded" onClick={onSave}>save</button>}
+
+          </Panel>
           <Controls />
           {/* <MiniMap /> */}
           <Background gap={12} size={1} />
         </ReactFlow>
-      </div>
+      {/* </div> */}
       <svg width="0" height="0">
         <defs>
           <marker

@@ -20,9 +20,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header/>
+        {/* <div className="flex flex-col">
+          <div className="flex">
+            <div className="w-64 shrink-0">jjjj</div>
+            <Header/>
+          </div >
+          {children}
+        </div> */}
         {children}
-        </body>
+      </body>
     </html>
   );
 }
